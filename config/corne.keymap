@@ -1,7 +1,11 @@
 /*
  * Corne keymap adapted from the ZSA Moonlander "Smooth Landing" layout
- * (Oryx zrn9d). 72 keys -> 42, so the number row is gone and the
+ * (Oryx pxeRD). 72 keys -> 42, so the number row is gone and the
  * Moonlander's top row folds away; everything else keeps its relative place.
+ *
+ * The Sys and Mouse layers are dropped. Only studio_unlock survives, on the
+ * left hand of Nav -- without a key bound to it ZMK Studio can connect but
+ * never unlock, so the keymap becomes uneditable over USB.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -13,8 +17,7 @@
 
 #define BASE 0
 #define SYM  1
-#define SYS  2
-#define NAV  3
+#define NAV  2
 
 // Key positions, for the home row mods' bilateral hold trigger.
 #define KEYS_L 0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29
@@ -38,6 +41,18 @@
                         hold-trigger-on-release;
                 };
 
+                // Thumb layer taps: tap for the key, hold for the layer.
+                // quick-tap-ms lets tap-then-hold auto-repeat, which matters
+                // for backspace.
+                tlt: thumb_layer_tap {
+                        compatible = "zmk,behavior-hold-tap";
+                        #binding-cells = <2>;
+                        flavor = "hold-preferred";
+                        tapping-term-ms = <200>;
+                        quick-tap-ms = <200>;
+                        bindings = <&mo>, <&kp>;
+                };
+
                 hmr: home_row_mod_right {
                         compatible = "zmk,behavior-hold-tap";
                         #binding-cells = <2>;
@@ -57,57 +72,44 @@
                 base_layer {
 // -----------------------------------------------------------------------------------------
 // | BSPC |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |  \   |
-// | TAB* |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+// | TAB^ |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
 // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | SHFT |
-//                    | SYS | BSPC| SPC |   | SYM | ENT | TAB |
-// TAB* = tap TAB, hold NAV.  A/S/D/F and J/K/L/; are GUI/ALT/SHFT/CTRL on hold.
+//                    | OPT |BSPC*| SPC |   | ENT |TAB* | CMD |
+// BSPC* = tap BSPC, hold NAV.   TAB* = tap TAB, hold SYM.   TAB^ = tap TAB, hold NAV.
+// A/S/D/F and J/K/L/; are GUI/ALT/SHFT/CTRL on hold.
                         bindings = <
-   &kp BSPC     &kp Q        &kp W        &kp E         &kp R        &kp T       &kp Y     &kp U        &kp I            &kp O        &kp P           &kp BSLH
-   &lt NAV TAB  &hml LGUI A  &hml LALT S  &hml LSHFT D  &hml LCTRL F &kp G       &kp H     &hmr RCTRL J &hmr RSHFT K     &hmr RALT L  &hmr RGUI SEMI  &kp SQT
-   &kp LSHFT    &kp Z        &kp X        &kp C         &kp V        &kp B       &kp N     &kp M        &kp COMMA        &kp DOT      &kp FSLH        &kp RSHFT
-                                          &mo SYS       &kp BSPC     &kp SPACE   &mo SYM   &kp RET      &kp TAB
+   &kp BSPC     &kp Q        &kp W        &kp E         &kp R        &kp T       &kp Y     &kp U        &kp I        &kp O        &kp P           &kp BSLH
+   &lt NAV TAB  &hml LGUI A  &hml LALT S  &hml LSHFT D  &hml LCTRL F &kp G       &kp H     &hmr RCTRL J &hmr RSHFT K &hmr RALT L  &hmr RGUI SEMI  &kp SQT
+   &kp LSHFT    &kp Z        &kp X        &kp C         &kp V        &kp B       &kp N     &kp M        &kp COMMA    &kp DOT      &kp FSLH        &kp RSHFT
+                                          &kp LALT      &tlt NAV BSPC &kp SPACE  &kp RET   &tlt SYM TAB &kp RGUI
                         >;
                 };
 
                 sym_layer {
 // -----------------------------------------------------------------------------------------
-// | DEL  |     |     |  {  |  }  |     |   |  /  |  7  |  8  |  9  |  *  | F12  |
-// |      |     |     |  (  |  )  |  `  |   |  -  |  4  |  5  |  6  |  +  |      |
-// |      |     |     |  [  |  ]  |  ~  |   |  =  |  1  |  2  |  3  |  .  |      |
-//                    |     | DEL |     |   |     |  0  | TAB |
+// | DEL  |  !  |  @  |  {  |  }  |  %  |   |  /  |  7  |  8  |  9  |  *  | F12  |
+// |      |  #  |  $  |  (  |  )  |  `  |   |  -  |  4  |  5  |  6  |  +  |      |
+// |      |  &  |  ^  |  [  |  ]  |  ~  |   |  =  |  1  |  2  |  3  |  .  |      |
+//                    |     |     |     |   |     |     |      |   (thumbs fall through to base)
                         bindings = <
-   &kp DEL   &trans &trans &kp LBRC &kp RBRC &trans      &kp FSLH  &kp N7 &kp N8 &kp N9 &kp ASTRK &kp F12
-   &trans    &trans &trans &kp LPAR &kp RPAR &kp GRAVE   &kp MINUS &kp N4 &kp N5 &kp N6 &kp PLUS  &trans
-   &trans    &trans &trans &kp LBKT &kp RBKT &kp TILDE   &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT   &trans
-                          &trans   &kp DEL  &trans      &trans    &kp N0 &kp TAB
-                        >;
-                };
-
-                sys_layer {
-// -----------------------------------------------------------------------------------------
-// | BOOT | INS |     |     |     |     |   |     | BRI-| BRI+|     |     | BOOT |
-// | RESET|     |     |     |     |PSCRN|   |     | VOL-| VOL+| MUTE|     | RESET|
-// | UNLK | BT0 | BT1 | BT2 | BT3 |BTCLR|   | OUT | PREV| P/P | NEXT|     |      |
-//                    |     |     |     |   |     |     |     |
-                        bindings = <
-   &bootloader    &kp INS      &trans       &trans       &trans       &trans        &trans      &kp C_BRI_DN &kp C_BRI_UP &trans      &trans &bootloader
-   &sys_reset     &trans       &trans       &trans       &trans       &kp PSCRN     &trans      &kp C_VOL_DN &kp C_VOL_UP &kp C_MUTE  &trans &sys_reset
-   &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR    &out OUT_TOG &kp C_PREV  &kp C_PP     &kp C_NEXT  &trans &trans
-                                            &trans       &trans       &trans        &trans      &trans       &trans
+   &kp DEL   &kp EXCL &kp AT    &kp LBRC &kp RBRC &kp PRCNT   &kp FSLH  &kp N7 &kp N8 &kp N9 &kp ASTRK &kp F12
+   &trans    &kp HASH &kp DLLR  &kp LPAR &kp RPAR &kp GRAVE   &kp MINUS &kp N4 &kp N5 &kp N6 &kp PLUS  &trans
+   &trans    &kp AMPS &kp CARET &kp LBKT &kp RBKT &kp TILDE   &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT   &kp N0
+                               &trans   &trans   &trans      &trans    &trans &trans
                         >;
                 };
 
                 nav_layer {
 // -----------------------------------------------------------------------------------------
-// |      |     |     |     |     |     |   |     | END | HOME|ZOOM-|ZOOM0|ZOOM+ |
+// | ESC  |     |     |     |     |     |   | UNLK| END | HOME|ZOOM-|ZOOM0|ZOOM+ |
 // |      |     |     |     |     |     |   | LFT | DWN |  UP | RGT |     |      |
 // |      |     |     |     |     |     |   |     |PGDN | PGUP|     |     |      |
 //                    |     |     |     |   |     |     |     |
                         bindings = <
-   &trans &trans &trans &trans &trans &trans   &trans   &kp END    &kp HOME  &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
-   &trans &trans &trans &trans &trans &trans   &kp LEFT &kp DOWN   &kp UP    &kp RIGHT     &trans     &trans
-   &trans &trans &trans &trans &trans &trans   &trans   &kp PG_DN  &kp PG_UP &trans        &trans     &trans
-                        &trans &trans &trans   &trans   &trans     &trans
+   &kp ESC     &trans         &trans        &trans       &trans       &trans       &studio_unlock &kp END &kp HOME &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
+   &trans      &trans         &trans        &trans       &trans       &trans       &kp LEFT &kp DOWN  &kp UP    &kp RIGHT     &trans     &trans
+   &trans      &trans         &trans        &trans       &trans       &trans       &trans   &kp PG_DN &kp PG_UP &trans        &trans     &trans
+                                            &trans       &trans       &trans       &trans   &trans    &trans
                         >;
                 };
         };
