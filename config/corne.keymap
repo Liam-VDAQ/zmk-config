@@ -12,12 +12,15 @@
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 
+// Layer index matters: ZMK resolves a key by scanning active layers from
+// the highest index down. SEL must sit BELOW every layer it selects, or
+// its own bindings shadow the target layer's.
 #define BASE  0
-#define SYM   1
-#define NAV   2
-#define SYS   3
-#define MOUSE 4
-#define SEL   5
+#define SEL   1
+#define SYM   2
+#define NAV   3
+#define SYS   4
+#define MOUSE 5
 
 // Key positions, for the bottom row mods' bilateral hold trigger.
 #define KEYS_L 0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29
@@ -87,6 +90,21 @@
                         >;
                 };
 
+                sel_layer {
+// -----------------------------------------------------------------------------------------
+// Held from either middle thumb. Both hands mirror each other, so whichever
+// thumb is down, the other hand picks the layer.
+// |      |     |     |     |     |     |   |     |     |     |     |     |      |
+// |      |MOUSE| NAV | SYS | SYM | BASE|   | BASE| SYM | SYS | NAV |MOUSE|      |
+// |      |     |     |     |     |     |   |     |     |     |     |     |      |
+                        bindings = <
+   &trans &trans    &trans  &trans  &trans  &trans     &trans   &trans  &trans  &trans  &trans    &trans
+   &trans &mo MOUSE &mo NAV &mo SYS &mo SYM &to BASE   &to BASE &mo SYM &mo SYS &mo NAV &mo MOUSE &trans
+   &trans &trans    &trans  &trans  &trans  &trans     &trans   &trans  &trans  &trans  &trans    &trans
+                            &trans  &trans  &trans     &trans   &trans  &trans
+                        >;
+                };
+
                 sym_layer {
 // -----------------------------------------------------------------------------------------
 // | DEL  |  !  |  @  |  {  |  }  |  %  |   |  /  |  7  |  8  |  9  |  *  | F12  |
@@ -137,21 +155,6 @@
    &trans &trans &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT &trans   &trans &mkp LCLK      &mkp RCLK    &trans &trans &trans
    &trans &trans &trans          &trans         &trans          &trans   &trans &msc SCRL_DOWN &msc SCRL_UP &trans &trans &trans
                                  &trans         &trans          &trans   &trans &trans         &trans
-                        >;
-                };
-
-                sel_layer {
-// -----------------------------------------------------------------------------------------
-// Held from either middle thumb. Both hands mirror each other, so whichever
-// thumb is down, the other hand picks the layer.
-// |      |     |     |     |     |     |   |     |     |     |     |     |      |
-// |      |MOUSE| NAV | SYS | SYM | BASE|   | BASE| SYM | SYS | NAV |MOUSE|      |
-// |      |     |     |     |     |     |   |     |     |     |     |     |      |
-                        bindings = <
-   &trans &trans    &trans  &trans  &trans  &trans     &trans   &trans  &trans  &trans  &trans    &trans
-   &trans &mo MOUSE &mo NAV &mo SYS &mo SYM &to BASE   &to BASE &mo SYM &mo SYS &mo NAV &mo MOUSE &trans
-   &trans &trans    &trans  &trans  &trans  &trans     &trans   &trans  &trans  &trans  &trans    &trans
-                            &trans  &trans  &trans     &trans   &trans  &trans
                         >;
                 };
         };
