@@ -59,6 +59,18 @@
                         hold-trigger-on-release;
                 };
 
+                // Both outer thumbs held together clears every bluetooth
+                // profile. tap-preferred with a long term means a quick press
+                // does nothing -- those two keys are OPT and CMD, which get
+                // pressed together in ordinary shortcuts.
+                bt_clr_hold: bt_clr_hold {
+                        compatible = "zmk,behavior-hold-tap";
+                        #binding-cells = <2>;
+                        flavor = "tap-preferred";
+                        tapping-term-ms = <1500>;
+                        bindings = <&bt_clr_all_macro>, <&none>;
+                };
+
                 // Thumb layer taps: tap for the key, hold for the layer.
                 // quick-tap-ms lets tap-then-hold auto-repeat, which matters
                 // for backspace.
@@ -70,6 +82,26 @@
                         tapping-term-ms = <200>;
                         quick-tap-ms = <200>;
                         bindings = <&mo>, <&kp>;
+                };
+        };
+
+        macros {
+                bt_clr_all_macro: bt_clr_all_macro {
+                        compatible = "zmk,behavior-macro";
+                        #binding-cells = <0>;
+                        bindings = <&bt BT_CLR_ALL>;
+                };
+        };
+
+        combos {
+                compatible = "zmk,combos";
+
+                // Outer thumbs, positions 36 and 41.
+                combo_bt_clear {
+                        bindings = <&bt_clr_hold 0 0>;
+                        key-positions = <36 41>;
+                        timeout-ms = <50>;
+                        require-prior-idle-ms = <250>;
                 };
         };
 
@@ -128,13 +160,13 @@
                 nav_layer {
                         display-name = "Nav+Zoom";
 // -----------------------------------------------------------------------------------------
-// | ESC  | BT0 | BT1 | BT2 | BT3 |CLRALL|  |     | END | HOME|ZOOM-|ZOOM0|ZOOM+ |
-// |      | BLE | USB | UNLK|     |     |   | LFT | DWN |  UP | RGT |     |      |
+// | ESC  |     |     |     |     |     |   |     | END | HOME|ZOOM-|ZOOM0|ZOOM+ |
+// |      |     | CTRL| SHFT | OPT | CMD |   | LFT | DWN |  UP | RGT |     |      |
+// Mods under the left hand so shift/opt/cmd combine with the arrows.
 // |      |     |     |     |     |     |   |     |PGDN | PGUP|     |     |      |
-// Recovery keys behind ONE hold: the far left middle key. No selector chord.
                         bindings = <
-   &kp ESC &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR_ALL   &trans &kp END &kp HOME &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
-   &trans  &out OUT_BLE &out OUT_USB &studio_unlock &trans &trans   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
+   &kp ESC &trans &trans &trans &trans &trans   &trans   &kp END   &kp HOME  &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
+   &trans  &trans &kp LCTRL &kp LSHFT &kp LALT &kp LGUI   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
    &trans  &trans &trans &trans &trans &trans   &trans   &kp PG_DN &kp PG_UP &trans        &trans     &trans
                          &trans &trans &trans   &trans   &trans    &trans
                         >;
