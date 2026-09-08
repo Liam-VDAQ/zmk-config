@@ -114,15 +114,15 @@
 // | BSPC |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |  \   |
 // | NAV  |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
 // | SHFT | Z^  | X^  | C^  | V^  |  B  |   |  N  | M^  | ,^  | .^  | /^  | SHFT |
-//                    | OPT |BSPC*| SPC |   | ENT |TAB* | CMD |
+//                    | OPT | SPC*|BSPC |   | TAB |ENT* | CMD |
 // Bottom row on hold: Z=CTRL X=SHFT C=ALT V=GUI, mirrored M=GUI ,=ALT .=SHFT /=CTRL
-// BSPC* / TAB* = tap the key, hold for the layer selector (see SEL).
+// SPC* / ENT* = tap the key, hold for the layer selector (see SEL).
 // NAV = hold for the arrow layer.
                         bindings = <
    &kp BSPC     &kp Q        &kp W        &kp E         &kp R        &kp T       &kp Y     &kp U        &kp I           &kp O          &kp P           &kp BSLH
    &mo NAV      &kp A        &kp S        &kp D         &kp F        &kp G       &kp H     &kp J        &kp K           &kp L          &kp SEMI        &kp SQT
    &kp LSHFT    &bml LCTRL Z &bml LSHFT X &bml LALT C   &bml LGUI V  &kp B       &kp N     &bmr RGUI M  &bmr RALT COMMA &bmr RSHFT DOT &bmr RCTRL FSLH &kp RSHFT
-                                          &kp LALT      &tlt SEL BSPC &kp SPACE  &kp RET   &tlt SEL TAB &kp RGUI
+                                          &kp LALT      &tlt SEL SPACE &kp BSPC  &kp TAB   &tlt SEL RET &kp RGUI
                         >;
                 };
 
