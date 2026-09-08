@@ -143,13 +143,13 @@
                         display-name = "Sys";
 // -----------------------------------------------------------------------------------------
 // | BOOT | BT0 | BT1 | BT2 | BT3 |BTCLR|   |     | BRI-| BRI+|     |     | BOOT |
-// | RESET| UNLK| OUT |     | INS |PSCRN|   |     | VOL-| VOL+| MUTE|     |RESET |
-// |      |     |     |     |     |CLRALL|  |     | PREV| P/P | NEXT|     |      |
+// | RESET| UNLK| OUT | BLE | INS |PSCRN|   |     | VOL-| VOL+| MUTE|     |RESET |
+// |      |     | USB |     |     |CLRALL|  |     | PREV| P/P | NEXT|     |      |
 // BT_CLR on T clears the active profile; BT_CLR_ALL on B clears all five.
                         bindings = <
    &bootloader &bt BT_SEL 0   &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &trans &kp C_BRI_DN &kp C_BRI_UP &trans     &trans &bootloader
-   &sys_reset  &studio_unlock &out OUT_TOG &trans       &kp INS      &kp PSCRN    &trans &kp C_VOL_DN &kp C_VOL_UP &kp C_MUTE &trans &sys_reset
-   &trans      &trans         &trans       &trans       &trans       &bt BT_CLR_ALL &trans &kp C_PREV &kp C_PP     &kp C_NEXT &trans &trans
+   &sys_reset  &studio_unlock &out OUT_TOG &out OUT_BLE &kp INS      &kp PSCRN    &trans &kp C_VOL_DN &kp C_VOL_UP &kp C_MUTE &trans &sys_reset
+   &trans      &trans         &out OUT_USB &trans       &trans       &bt BT_CLR_ALL &trans &kp C_PREV &kp C_PP     &kp C_NEXT &trans &trans
                                            &trans       &trans       &trans       &trans &trans       &trans
                         >;
                 };
