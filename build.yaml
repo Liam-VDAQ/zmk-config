@@ -26,3 +26,7 @@ include:
     artifact-name: corne_left_studio
   - board: nice_nano_v2
     shield: corne_right
+  # Wipes stored settings (bluetooth bonds, split pairing, keyboard name).
+  # Flash to BOTH halves, then reflash the real firmware to both.
+  - board: nice_nano_v2
+    shield: settings_reset
