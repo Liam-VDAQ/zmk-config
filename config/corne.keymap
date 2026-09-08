@@ -128,12 +128,13 @@
                 nav_layer {
                         display-name = "Nav+Zoom";
 // -----------------------------------------------------------------------------------------
-// | ESC  |     |     |     |     |     |   |     | END | HOME|ZOOM-|ZOOM0|ZOOM+ |
-// |      |     |     |     |     |     |   | LFT | DWN |  UP | RGT |     |      |
+// | ESC  | BT0 | BT1 | BT2 | BT3 |CLRALL|  |     | END | HOME|ZOOM-|ZOOM0|ZOOM+ |
+// |      | BLE | USB | UNLK|     |     |   | LFT | DWN |  UP | RGT |     |      |
 // |      |     |     |     |     |     |   |     |PGDN | PGUP|     |     |      |
+// Recovery keys behind ONE hold: the far left middle key. No selector chord.
                         bindings = <
-   &kp ESC &trans &trans &trans &trans &trans   &trans   &kp END   &kp HOME  &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
-   &trans  &trans &trans &trans &trans &trans   &kp LEFT &kp DOWN  &kp UP    &kp RIGHT     &trans     &trans
+   &kp ESC &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR_ALL   &trans &kp END &kp HOME &kp LC(MINUS) &kp LC(N0) &kp LC(EQUAL)
+   &trans  &out OUT_BLE &out OUT_USB &studio_unlock &trans &trans   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
    &trans  &trans &trans &trans &trans &trans   &trans   &kp PG_DN &kp PG_UP &trans        &trans     &trans
                          &trans &trans &trans   &trans   &trans    &trans
                         >;
